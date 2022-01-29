@@ -42,6 +42,7 @@
             this.customPictureBox.TabIndex = 0;
             this.customPictureBox.TabStop = false;
             this.customPictureBox.scaleChanged += new PageDisplay.CustomPictureBox.ScaleChanged(this.ScaleChangedWheel);
+            this.customPictureBox.horisontalScroll += new PageDisplay.CustomPictureBox.HorisontalScroll(this.HorizontalScrollChanged);
             // 
             // PageDisplayComponent
             // 
@@ -50,7 +51,8 @@
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.customPictureBox);
             this.Name = "PageDisplayComponent";
-            this.Size = new System.Drawing.Size(644, 163);
+            this.Size = new System.Drawing.Size(623, 142);
+            this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.PageDisplayComponentScroll);
             ((System.ComponentModel.ISupportInitialize)(this.customPictureBox)).EndInit();
             this.ResumeLayout(false);
 
