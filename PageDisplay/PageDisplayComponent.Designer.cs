@@ -39,10 +39,12 @@
             this.customPictureBox.Location = new System.Drawing.Point(0, 0);
             this.customPictureBox.Name = "customPictureBox";
             this.customPictureBox.Size = new System.Drawing.Size(1000, 1000);
+            this.customPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.customPictureBox.TabIndex = 0;
             this.customPictureBox.TabStop = false;
             this.customPictureBox.scaleChanged += new PageDisplay.CustomPictureBox.ScaleChanged(this.ScaleChangedWheel);
             this.customPictureBox.horisontalScroll += new PageDisplay.CustomPictureBox.HorisontalScroll(this.HorizontalScrollChanged);
+            this.customPictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.customPictureBoxPaint);
             // 
             // PageDisplayComponent
             // 
@@ -51,7 +53,7 @@
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.customPictureBox);
             this.Name = "PageDisplayComponent";
-            this.Size = new System.Drawing.Size(623, 142);
+            this.Size = new System.Drawing.Size(539, 58);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.PageDisplayComponentScroll);
             ((System.ComponentModel.ISupportInitialize)(this.customPictureBox)).EndInit();
             this.ResumeLayout(false);

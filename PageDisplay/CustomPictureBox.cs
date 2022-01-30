@@ -5,6 +5,8 @@
         const int WM_MOUSEWHEEL = 0x020A;
         const int MK_CONTROL = 0x8;
         const int MK_SHIFT = 0x4;
+        const int wheelForward = 120;
+        const int wheelBackward = -120;
 
         public delegate void ScaleChanged(bool up);
         public event ScaleChanged scaleChanged;
@@ -25,11 +27,11 @@
                 (int withKey, int delta) wParam = SplitWParam(m.WParam);
                 if (wParam.withKey == MK_CONTROL)
                 {
-                    if (wParam.delta == 120) //If wheel rotated forward
+                    if (wParam.delta == wheelForward)
                     {
                         scaleChanged?.Invoke(true);
                     }
-                    else //If wheel rotated backward
+                    else if (wParam.delta == wheelBackward)
                     {
                         scaleChanged?.Invoke(false);
                     }
@@ -37,11 +39,11 @@
                 }
                 else if (wParam.withKey == MK_SHIFT)
                 {
-                    if (wParam.delta == 120) //If wheel rotated forward
+                    if (wParam.delta == wheelForward)
                     {
                         horisontalScroll?.Invoke(true);
                     }
-                    else //If wheel rotated backward
+                    else if (wParam.delta == wheelBackward)
                     {
                         horisontalScroll?.Invoke(false);
                     }

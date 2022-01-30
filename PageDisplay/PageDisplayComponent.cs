@@ -5,31 +5,36 @@
         Image original = Image.FromFile("templateImage.jpg");
         float currentScale = 1F;
         float scaleStep = 0.1F;
-        int scrollStep = 10;
+        int scrollStep = 20;
         int currentHScroll = 0;
         bool isScrollEditing = false;
         public PageDisplayComponent()
         {
             InitializeComponent();
             customPictureBox.Image = original;
+            customPictureBox.Size = new Size(customPictureBox.Image.Width, customPictureBox.Image.Height);
         }
 
         private void ScaleChangedWheel(bool up)
         {
             if (up)
             {
-                currentScale += scaleStep;
+                //currentScale += scaleStep;
+                for (int i = 0; i < 5; i++)
+                {
+                    currentScale += 0.02F;
+                    customPictureBox.Refresh();
+                }
             }
-            else if (currentScale >= scaleStep)
+            else if (currentScale - scaleStep > 0.2F)
             {
-                currentScale -= scaleStep;
+                for (int i = 0; i < 5; i++)
+                {
+                    currentScale -= 0.02F;
+                    customPictureBox.Refresh();
+                }
             }
-            int newWidth = (int)(original.Width * currentScale);
-            int newHeight = (int)(original.Height * currentScale);
-            customPictureBox.Image = ImageScaling.ResizeBitmap((Bitmap)original, newWidth, newHeight, newWidth, newHeight);
-            customPictureBox.Size = new Size(newWidth, newHeight);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
+            customPictureBox.Refresh();
             return;
         }
 
@@ -71,6 +76,14 @@
             {
                 currentHScroll = HorizontalScroll.Value;
             }
+            return;
+        }
+
+        private void customPictureBoxPaint(object sender, PaintEventArgs e)
+        {
+            int newWidth = (int)(original.Width * currentScale);
+            int newHeight = (int)(original.Height * currentScale);
+            customPictureBox.Size = new Size(newWidth, newHeight);
             return;
         }
     }
