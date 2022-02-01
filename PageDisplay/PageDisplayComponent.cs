@@ -19,11 +19,14 @@
         {
             if (up)
             {
-                //currentScale += scaleStep;
-                for (int i = 0; i < 5; i++)
+                if (currentScale < 5F)
                 {
-                    currentScale += 0.02F;
-                    customPictureBox.Refresh();
+                    //currentScale += scaleStep;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        currentScale += 0.02F;
+                        customPictureBox.Refresh();
+                    }
                 }
             }
             else if (currentScale - scaleStep > 0.2F)
@@ -40,6 +43,7 @@
 
         private void HorizontalScrollChanged(bool up)
         {
+            var i = Width;
             int newScrollValue;
             if (up)
             {
@@ -70,12 +74,26 @@
             return;
         }
 
+        public void Draw(int st, int fin, int stY, int finY)
+        {
+            //Temporary function to draw rect by coord
+            Graphics g = Graphics.FromImage(customPictureBox.Image);
+            Rectangle rect = new Rectangle(st, stY, fin-st, finY-stY);
+            g.DrawRectangle(new Pen(Color.Red, .5f), rect);
+            return;
+        }
+
         private void PageDisplayComponentScroll(object sender, ScrollEventArgs e)
         {
             if (!isScrollEditing)
             {
                 currentHScroll = HorizontalScroll.Value;
             }
+            // Code for test calculating position of the visible area of ​​the image
+            (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(customPictureBox.Image, HorizontalScroll, currentScale, true);
+            (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(customPictureBox.Image, VerticalScroll, currentScale);
+            Draw(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
+            // -----
             return;
         }
 
@@ -83,7 +101,12 @@
         {
             int newWidth = (int)(original.Width * currentScale);
             int newHeight = (int)(original.Height * currentScale);
-            customPictureBox.Size = new Size(newWidth, newHeight);
+            Size newScaledSize = new Size(newWidth, newHeight);
+            if (newScaledSize != customPictureBox.Size)
+            {
+                customPictureBox.Size = new Size(newWidth, newHeight);
+            }
+            customPictureBox.Image = customPictureBox.Image;
             return;
         }
     }
