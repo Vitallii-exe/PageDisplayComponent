@@ -90,8 +90,14 @@
                 currentHScroll = HorizontalScroll.Value;
             }
             // Code for test calculating position of the visible area of ​​the image
-            (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(customPictureBox.Image, HorizontalScroll, currentScale, true);
-            (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(customPictureBox.Image, VerticalScroll, currentScale);
+            ImageScaling.ImageDisplayProperties horisontalImgDispProp = new ImageScaling.ImageDisplayProperties
+                                                                            (customPictureBox.Image, 
+                                                                            HorizontalScroll, currentScale, true);
+            ImageScaling.ImageDisplayProperties verticalImgDispProp = new ImageScaling.ImageDisplayProperties
+                                                                            (customPictureBox.Image,
+                                                                            VerticalScroll, currentScale, false);
+            (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(horisontalImgDispProp);
+            (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(verticalImgDispProp);
             Draw(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
             // -----
             return;
