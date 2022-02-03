@@ -73,5 +73,22 @@
 
             return (leftBorder, rightBorder);
         }
+
+        public static Point SetCenterElement(Point elementCursor, Point areaCursor)
+        {
+            //Now it doesn't working correctly
+            int xCoord = areaCursor.X - elementCursor.X;
+            int yCoord = areaCursor.Y - elementCursor.Y;
+            if (xCoord < 0)
+            {
+                xCoord = 0;
+            }
+            if (yCoord < 0)
+            {
+                yCoord = 0;
+            }
+            Point result = new Point(xCoord, yCoord);
+            return result;
+        }
     }
 }

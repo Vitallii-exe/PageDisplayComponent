@@ -2,30 +2,49 @@
 {
     public partial class PageDisplayComponent : UserControl
     {
-        Image original = Image.FromFile("templateImage.jpg");
+        Image original = Image.FromFile("ImageTemplates\\templateImage3.jpg");
         float currentScale = 1F;
         float scaleStep = 0.1F;
         int scrollStep = 20;
         int currentHScroll = 0;
         bool isScrollEditing = false;
+
+        Point customPictureBoxCursorPos = new Point(0, 0);
+        Point componentCursorPos = new Point(0, 0);
         public PageDisplayComponent()
         {
             InitializeComponent();
             customPictureBox.Image = original;
             customPictureBox.Size = new Size(customPictureBox.Image.Width, customPictureBox.Image.Height);
+            scrollStep = HorizontalScroll.Maximum - HorizontalScroll.LargeChange;
         }
 
-        private void ScaleChangedWheel(bool up)
+        public void RedrawToNewScaleСustomPictureBox()
+        {
+            int newWidth = (int)(original.Width * currentScale);
+            int newHeight = (int)(original.Height * currentScale);
+            Size newScaledSize = new Size(newWidth, newHeight);
+            if (newScaledSize != customPictureBox.Size)
+            {
+                CustomPictureBox buffer = customPictureBox;
+                buffer.Size = new Size(newWidth, newHeight);
+                //buffer.Location = ImageScaling.SetCenterElement(customPictureBoxCursorPos, componentCursorPos);
+                customPictureBox = buffer;
+            }
+            return;
+        }
+
+        private void ScaleChangedByWheel(bool up)
         {
             if (up)
             {
                 if (currentScale < 5F)
                 {
-                    //currentScale += scaleStep;
                     for (int i = 0; i < 5; i++)
                     {
                         currentScale += 0.02F;
-                        customPictureBox.Refresh();
+                        RedrawToNewScaleСustomPictureBox();
+                        Refresh();
                     }
                 }
             }
@@ -34,7 +53,8 @@
                 for (int i = 0; i < 5; i++)
                 {
                     currentScale -= 0.02F;
-                    customPictureBox.Refresh();
+                    RedrawToNewScaleСustomPictureBox();
+                    Refresh();
                 }
             }
             customPictureBox.Refresh();
@@ -43,7 +63,6 @@
 
         private void HorizontalScrollChanged(bool up)
         {
-            var i = Width;
             int newScrollValue;
             if (up)
             {
@@ -80,6 +99,7 @@
             Graphics g = Graphics.FromImage(customPictureBox.Image);
             Rectangle rect = new Rectangle(st, stY, fin-st, finY-stY);
             g.DrawRectangle(new Pen(Color.Red, .5f), rect);
+            Refresh();
             return;
         }
 
@@ -103,17 +123,15 @@
             return;
         }
 
-        private void customPictureBoxPaint(object sender, PaintEventArgs e)
+        private void PageDisplayComponentMouseMove(object sender, MouseEventArgs e)
         {
-            int newWidth = (int)(original.Width * currentScale);
-            int newHeight = (int)(original.Height * currentScale);
-            Size newScaledSize = new Size(newWidth, newHeight);
-            if (newScaledSize != customPictureBox.Size)
-            {
-                customPictureBox.Size = new Size(newWidth, newHeight);
-            }
-            customPictureBox.Image = customPictureBox.Image;
-            return;
+            componentCursorPos = e.Location;
+
+        }
+
+        private void customPictureBoxMouseMove(object sender, MouseEventArgs e)
+        {
+            customPictureBoxCursorPos = e.Location;
         }
     }
 }
