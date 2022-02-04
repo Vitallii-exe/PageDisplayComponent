@@ -11,12 +11,14 @@
 
         Point customPictureBoxCursorPos = new Point(0, 0);
         Point componentCursorPos = new Point(0, 0);
+        bool lockCursors = false;
         public PageDisplayComponent()
         {
             InitializeComponent();
             customPictureBox.Image = original;
             customPictureBox.Size = new Size(customPictureBox.Image.Width, customPictureBox.Image.Height);
             scrollStep = HorizontalScroll.Maximum - HorizontalScroll.LargeChange;
+            customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
         }
 
         public void RedrawToNewScaleСustomPictureBox()
@@ -26,10 +28,18 @@
             Size newScaledSize = new Size(newWidth, newHeight);
             if (newScaledSize != customPictureBox.Size)
             {
-                CustomPictureBox buffer = customPictureBox;
-                buffer.Size = new Size(newWidth, newHeight);
-                //buffer.Location = ImageScaling.SetCenterElement(customPictureBoxCursorPos, componentCursorPos);
-                customPictureBox = buffer;
+                Size oldSize = customPictureBox.Size;
+                lockCursors = true;
+                customPictureBox.Size = new Size(newWidth, newHeight);
+                if (newWidth < Width & newHeight < Height)
+                {
+                    customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+                }
+                else
+                {
+                    customPictureBox.Location = ImageScaling.GetCoordToScaleWithCursorBinding(customPictureBoxCursorPos, customPictureBox.Size, oldSize, customPictureBox.Location);
+                }
+                lockCursors = false;
             }
             return;
         }
@@ -40,22 +50,17 @@
             {
                 if (currentScale < 5F)
                 {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        currentScale += 0.02F;
+                        currentScale += 0.1F;
                         RedrawToNewScaleСustomPictureBox();
                         Refresh();
-                    }
                 }
             }
             else if (currentScale - scaleStep > 0.2F)
             {
-                for (int i = 0; i < 5; i++)
-                {
-                    currentScale -= 0.02F;
+
+                    currentScale -= 0.1F;
                     RedrawToNewScaleСustomPictureBox();
                     Refresh();
-                }
             }
             customPictureBox.Refresh();
             return;
@@ -125,13 +130,19 @@
 
         private void PageDisplayComponentMouseMove(object sender, MouseEventArgs e)
         {
-            componentCursorPos = e.Location;
+            if (!lockCursors)
+            {
+                componentCursorPos = e.Location;
+            }
 
         }
 
         private void customPictureBoxMouseMove(object sender, MouseEventArgs e)
         {
-            customPictureBoxCursorPos = e.Location;
+            if (!lockCursors)
+            {
+                customPictureBoxCursorPos = e.Location;
+            }
         }
     }
 }

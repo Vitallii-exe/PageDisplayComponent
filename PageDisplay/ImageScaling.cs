@@ -74,19 +74,22 @@
             return (leftBorder, rightBorder);
         }
 
-        public static Point SetCenterElement(Point elementCursor, Point areaCursor)
+        public static Point GetCoordToCenterElement(Size elementSize, Size areaSize)
         {
             //Now it doesn't working correctly
-            int xCoord = areaCursor.X - elementCursor.X;
-            int yCoord = areaCursor.Y - elementCursor.Y;
-            if (xCoord < 0)
-            {
-                xCoord = 0;
-            }
-            if (yCoord < 0)
-            {
-                yCoord = 0;
-            }
+            int xCoord = areaSize.Width / 2 - elementSize.Width / 2;
+            int yCoord = areaSize.Height / 2 - elementSize.Height / 2;
+            
+            Point result = new Point(xCoord, yCoord);
+            return result;
+        }
+
+        public static Point GetCoordToScaleWithCursorBinding(Point elementCursor, Size newSize, Size oldSize, Point currentLocation)
+        {
+            float diff = (float)newSize.Width / oldSize.Width;
+
+            int xCoord = currentLocation.X + elementCursor.X - (int)(elementCursor.X * diff);
+            int yCoord = currentLocation.Y + elementCursor.Y - (int)(elementCursor.Y * diff);
             Point result = new Point(xCoord, yCoord);
             return result;
         }
