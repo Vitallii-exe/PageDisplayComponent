@@ -18,7 +18,7 @@
             customPictureBox.Image = original;
             customPictureBox.Size = new Size(customPictureBox.Image.Width, customPictureBox.Image.Height);
             scrollStep = HorizontalScroll.Maximum - HorizontalScroll.LargeChange;
-            customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+            //customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
         }
 
         public void RedrawToNewScaleСustomPictureBox()
@@ -33,7 +33,7 @@
                 customPictureBox.Size = new Size(newWidth, newHeight);
                 if (newWidth < Width & newHeight < Height)
                 {
-                    customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+                    //customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
                 }
                 else
                 {
@@ -121,8 +121,8 @@
             ImageScaling.ImageDisplayProperties verticalImgDispProp = new ImageScaling.ImageDisplayProperties
                                                                             (customPictureBox.Image,
                                                                             VerticalScroll, currentScale, false);
-            (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(horisontalImgDispProp);
-            (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(verticalImgDispProp);
+            (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(horisontalImgDispProp, customPictureBox.Location.X);
+            (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(verticalImgDispProp, customPictureBox.Location.Y);
             Draw(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
             // -----
             return;
@@ -143,6 +143,7 @@
             {
                 customPictureBoxCursorPos = e.Location;
             }
+            System.Diagnostics.Debug.WriteLine("X - " + e.Location.X + " Y - " + e.Location.Y);
         }
     }
 }

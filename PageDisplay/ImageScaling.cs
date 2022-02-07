@@ -40,7 +40,7 @@
             return result;
         }
 
-        public static (int, int) GetPointVisibleArea(ImageDisplayProperties imgDispProp)
+        public static (int, int) GetPointVisibleArea(ImageDisplayProperties imgDispProp, int shift)
         {
             //Gets the start and end position of the visible area of ​​the image
             if (imgDispProp.imageHeight == 0 | imgDispProp.imageWidth == 0)
@@ -68,7 +68,9 @@
 
             float scrollStep = (currentImageSize - imgDispProp.scrollLargeChange) / scrollMaxValue;
 
-            int leftBorder = (int)(scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale);
+            float corr = -shift / imgDispProp.currentScale - scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale;
+
+            int leftBorder = (int)(corr + scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale);
             int rightBorder = leftBorder + (int)(imgDispProp.scrollLargeChange / imgDispProp.currentScale) - 2;
 
             return (leftBorder, rightBorder);
