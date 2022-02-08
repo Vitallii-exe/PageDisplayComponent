@@ -2,15 +2,16 @@
 {
     public partial class PageDisplayComponent : UserControl
     {
-        Image original = Image.FromFile("ImageTemplates\\templateImage3.jpg");
+        Image original = Properties.Resources.templateImage3;
         float currentScale = 1F;
-        float scaleStep = 0.1F;
+        float[] scaleSteps = {0.1F, 0.1F, 0.1F, 0.2F, 0.2F, 0.5F, 0.5F, 1F};
+        uint currentScaleStepIndex = 0;
+        bool isScaleUp = false;
         int scrollStep = 20;
         int currentHScroll = 0;
         bool isScrollEditing = false;
 
         Point customPictureBoxCursorPos = new Point(0, 0);
-        Point componentCursorPos = new Point(0, 0);
         bool lockCursors = false;
         public PageDisplayComponent()
         {
@@ -18,7 +19,7 @@
             customPictureBox.Image = original;
             customPictureBox.Size = new Size(customPictureBox.Image.Width, customPictureBox.Image.Height);
             scrollStep = HorizontalScroll.Maximum - HorizontalScroll.LargeChange;
-            //customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+            customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
         }
 
         public void RedrawToNewScaleСustomPictureBox()
@@ -33,7 +34,7 @@
                 customPictureBox.Size = new Size(newWidth, newHeight);
                 if (newWidth < Width & newHeight < Height)
                 {
-                    //customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+                    customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
                 }
                 else
                 {
@@ -48,21 +49,46 @@
         {
             if (up)
             {
-                if (currentScale < 5F)
+                if (!isScaleUp)
                 {
-                        currentScale += 0.1F;
-                        RedrawToNewScaleСustomPictureBox();
-                        Refresh();
+                    currentScaleStepIndex = 0;
                 }
+                if (currentScaleStepIndex < scaleSteps.Length - 1)
+                {
+                    currentScaleStepIndex += 1;
+                }
+                isScaleUp = true;
             }
-            else if (currentScale - scaleStep > 0.2F)
+            else
             {
-
-                    currentScale -= 0.1F;
-                    RedrawToNewScaleСustomPictureBox();
-                    Refresh();
+                if (isScaleUp)
+                {
+                    currentScaleStepIndex = 0;
+                }
+                if (currentScaleStepIndex < scaleSteps.Length - 1)
+                {
+                    currentScaleStepIndex += 1;
+                }
+                isScaleUp = false;
             }
-            customPictureBox.Refresh();
+            if (isScaleUp)
+            {
+                currentScale += scaleSteps[currentScaleStepIndex];
+            }
+            else
+            {
+                currentScale -= scaleSteps[currentScaleStepIndex];
+            }
+            if (currentScale > 5F)
+            {
+                currentScale = 5F;
+            }
+            else if (currentScale < 0.2F)
+            {
+                currentScale = 0.2F;
+            }
+            RedrawToNewScaleСustomPictureBox();
+            Refresh();
             return;
         }
 
@@ -98,7 +124,7 @@
             return;
         }
 
-        public void Draw(int st, int fin, int stY, int finY)
+        public void TmpDrawRect(int st, int fin, int stY, int finY)
         {
             //Temporary function to draw rect by coord
             Graphics g = Graphics.FromImage(customPictureBox.Image);
@@ -123,18 +149,9 @@
                                                                             VerticalScroll, currentScale, false);
             (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(horisontalImgDispProp, customPictureBox.Location.X);
             (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(verticalImgDispProp, customPictureBox.Location.Y);
-            Draw(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
+            TmpDrawRect(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
             // -----
             return;
-        }
-
-        private void PageDisplayComponentMouseMove(object sender, MouseEventArgs e)
-        {
-            if (!lockCursors)
-            {
-                componentCursorPos = e.Location;
-            }
-
         }
 
         private void customPictureBoxMouseMove(object sender, MouseEventArgs e)
@@ -143,7 +160,7 @@
             {
                 customPictureBoxCursorPos = e.Location;
             }
-            System.Diagnostics.Debug.WriteLine("X - " + e.Location.X + " Y - " + e.Location.Y);
+            //System.Diagnostics.Debug.WriteLine("X - " + e.Location.X + " Y - " + e.Location.Y);
         }
     }
 }

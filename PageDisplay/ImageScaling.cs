@@ -68,9 +68,9 @@
 
             float scrollStep = (currentImageSize - imgDispProp.scrollLargeChange) / scrollMaxValue;
 
-            float corr = -shift / imgDispProp.currentScale - scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale;
+            float correctionShift = -shift / imgDispProp.currentScale - scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale;
 
-            int leftBorder = (int)(corr + scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale);
+            int leftBorder = (int)(correctionShift + scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale);
             int rightBorder = leftBorder + (int)(imgDispProp.scrollLargeChange / imgDispProp.currentScale) - 2;
 
             return (leftBorder, rightBorder);
@@ -78,7 +78,6 @@
 
         public static Point GetCoordToCenterElement(Size elementSize, Size areaSize)
         {
-            //Now it doesn't working correctly
             int xCoord = areaSize.Width / 2 - elementSize.Width / 2;
             int yCoord = areaSize.Height / 2 - elementSize.Height / 2;
             

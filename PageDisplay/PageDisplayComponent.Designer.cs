@@ -36,6 +36,7 @@
             // 
             this.customPictureBox.BackColor = System.Drawing.Color.GreenYellow;
             this.customPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.customPictureBox.Image = global::PageDisplay.Properties.Resources.templateImage3;
             this.customPictureBox.Location = new System.Drawing.Point(0, 0);
             this.customPictureBox.Name = "customPictureBox";
             this.customPictureBox.Size = new System.Drawing.Size(833, 309);
@@ -54,9 +55,8 @@
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Controls.Add(this.customPictureBox);
             this.Name = "PageDisplayComponent";
-            this.Size = new System.Drawing.Size(720, 208);
+            this.Size = new System.Drawing.Size(1012, 548);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.PageDisplayComponentScroll);
-            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PageDisplayComponentMouseMove);
             ((System.ComponentModel.ISupportInitialize)(this.customPictureBox)).EndInit();
             this.ResumeLayout(false);
 

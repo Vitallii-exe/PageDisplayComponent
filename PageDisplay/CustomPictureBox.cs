@@ -20,11 +20,6 @@
             int highOrder = unchecked((short)(wParam >> 16));
             return (lowOrder, highOrder);
         }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
         protected override void WndProc(ref Message m)
         {
             if (m.Msg == WM_MOUSEWHEEL)
