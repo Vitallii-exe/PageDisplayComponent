@@ -1,6 +1,6 @@
 ﻿namespace PageDisplay
 {
-    public class CustomPictureBox : PictureBox
+    public partial class PageDisplayComponent : UserControl
     {
         const int WM_MOUSEWHEEL = 0x020A;
         const int MK_CONTROL = 0x8;
@@ -8,11 +8,6 @@
         const int wheelForward = 120;
         const int wheelBackward = -120;
 
-        public delegate void ScaleChanged(bool up);
-        public event ScaleChanged scaleChanged;
-
-        public delegate void HorisontalScroll(bool up);
-        public event HorisontalScroll horisontalScroll;
         private (int, int) SplitWParam(IntPtr _wParam)
         {
             uint wParam = unchecked(IntPtr.Size == 8 ? (uint)_wParam.ToInt64() : (uint)_wParam.ToInt32());
@@ -29,11 +24,11 @@
                 {
                     if (wParam.delta == wheelForward)
                     {
-                        scaleChanged?.Invoke(true);
+                        ScaleChangedByWheel(true);
                     }
                     else if (wParam.delta == wheelBackward)
                     {
-                        scaleChanged?.Invoke(false);
+                        ScaleChangedByWheel(false);
                     }
                     return;
                 }
@@ -41,11 +36,11 @@
                 {
                     if (wParam.delta == wheelForward)
                     {
-                        horisontalScroll?.Invoke(true);
+                        HorizontalScrollChanged(true);
                     }
                     else if (wParam.delta == wheelBackward)
                     {
-                        horisontalScroll?.Invoke(false);
+                        HorizontalScrollChanged(false);
                     }
                     return;
                 }

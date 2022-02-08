@@ -4,7 +4,7 @@
     {
         Image original = Properties.Resources.templateImage3;
         float currentScale = 1F;
-        float[] scaleSteps = {0.1F, 0.1F, 0.1F, 0.2F, 0.2F, 0.5F, 0.5F, 1F};
+        float[] scaleSteps = {0.1F, 0.1F, 0.1F, 0.1F, 0.2F, 0.2F, 0.3F, 0.4F, 0.5F, 1F};
         uint currentScaleStepIndex = 0;
         bool isScaleUp = false;
         int scrollStep = 20;
@@ -16,10 +16,10 @@
         public PageDisplayComponent()
         {
             InitializeComponent();
-            customPictureBox.Image = original;
-            customPictureBox.Size = new Size(customPictureBox.Image.Width, customPictureBox.Image.Height);
+            pictureBox.Image = original;
+            pictureBox.Size = new Size(pictureBox.Image.Width, pictureBox.Image.Height);
             scrollStep = HorizontalScroll.Maximum - HorizontalScroll.LargeChange;
-            customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+            pictureBox.Location = ImageScaling.GetCoordToCenterElement(pictureBox.Size, Size);
         }
 
         public void RedrawToNewScaleСustomPictureBox()
@@ -27,18 +27,18 @@
             int newWidth = (int)(original.Width * currentScale);
             int newHeight = (int)(original.Height * currentScale);
             Size newScaledSize = new Size(newWidth, newHeight);
-            if (newScaledSize != customPictureBox.Size)
+            if (newScaledSize != pictureBox.Size)
             {
-                Size oldSize = customPictureBox.Size;
+                Size oldSize = pictureBox.Size;
                 lockCursors = true;
-                customPictureBox.Size = new Size(newWidth, newHeight);
+                pictureBox.Size = new Size(newWidth, newHeight);
                 if (newWidth < Width & newHeight < Height)
                 {
-                    customPictureBox.Location = ImageScaling.GetCoordToCenterElement(customPictureBox.Size, Size);
+                    pictureBox.Location = ImageScaling.GetCoordToCenterElement(pictureBox.Size, Size);
                 }
                 else
                 {
-                    customPictureBox.Location = ImageScaling.GetCoordToScaleWithCursorBinding(customPictureBoxCursorPos, customPictureBox.Size, oldSize, customPictureBox.Location);
+                    pictureBox.Location = ImageScaling.GetCoordToScaleWithCursorBinding(customPictureBoxCursorPos, pictureBox.Size, oldSize, pictureBox.Location);
                 }
                 lockCursors = false;
             }
@@ -127,7 +127,7 @@
         public void TmpDrawRect(int st, int fin, int stY, int finY)
         {
             //Temporary function to draw rect by coord
-            Graphics g = Graphics.FromImage(customPictureBox.Image);
+            Graphics g = Graphics.FromImage(pictureBox.Image);
             Rectangle rect = new Rectangle(st, stY, fin-st, finY-stY);
             g.DrawRectangle(new Pen(Color.Red, .5f), rect);
             Refresh();
@@ -141,15 +141,15 @@
                 currentHScroll = HorizontalScroll.Value;
             }
             // Code for test calculating position of the visible area of ​​the image
-            ImageScaling.ImageDisplayProperties horisontalImgDispProp = new ImageScaling.ImageDisplayProperties
-                                                                            (customPictureBox.Image, 
-                                                                            HorizontalScroll, currentScale, true);
-            ImageScaling.ImageDisplayProperties verticalImgDispProp = new ImageScaling.ImageDisplayProperties
-                                                                            (customPictureBox.Image,
-                                                                            VerticalScroll, currentScale, false);
-            (int st, int fin) Visible = ImageScaling.GetPointVisibleArea(horisontalImgDispProp, customPictureBox.Location.X);
-            (int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(verticalImgDispProp, customPictureBox.Location.Y);
-            TmpDrawRect(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
+            //ImageScaling.ImageDisplayProperties horisontalImgDispProp = new ImageScaling.ImageDisplayProperties
+            //                                                                (pictureBox.Image.Size, Size,
+            //                                                                HorizontalScroll, currentScale, true);
+            //ImageScaling.ImageDisplayProperties verticalImgDispProp = new ImageScaling.ImageDisplayProperties
+            //                                                                (pictureBox.Image.Size, Size,
+            //                                                                VerticalScroll, currentScale, false);
+            //(int st, int fin) Visible = ImageScaling.GetPointVisibleArea(horisontalImgDispProp, pictureBox.Location.X);
+            //(int st, int fin) Visible2 = ImageScaling.GetPointVisibleArea(verticalImgDispProp, pictureBox.Location.Y);
+            //TmpDrawRect(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
             // -----
             return;
         }

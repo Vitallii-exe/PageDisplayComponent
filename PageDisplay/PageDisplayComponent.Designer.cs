@@ -28,42 +28,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.customPictureBox = new PageDisplay.CustomPictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.customPictureBox)).BeginInit();
+            this.pictureBox = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // customPictureBox
             // 
-            this.customPictureBox.BackColor = System.Drawing.Color.GreenYellow;
-            this.customPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.customPictureBox.Image = global::PageDisplay.Properties.Resources.templateImage3;
-            this.customPictureBox.Location = new System.Drawing.Point(0, 0);
-            this.customPictureBox.Name = "customPictureBox";
-            this.customPictureBox.Size = new System.Drawing.Size(833, 309);
-            this.customPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.customPictureBox.TabIndex = 0;
-            this.customPictureBox.TabStop = false;
-            this.customPictureBox.WaitOnLoad = true;
-            this.customPictureBox.scaleChanged += new PageDisplay.CustomPictureBox.ScaleChanged(this.ScaleChangedByWheel);
-            this.customPictureBox.horisontalScroll += new PageDisplay.CustomPictureBox.HorisontalScroll(this.HorizontalScrollChanged);
-            this.customPictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.customPictureBoxMouseMove);
+            this.pictureBox.BackColor = System.Drawing.Color.GreenYellow;
+            this.pictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.pictureBox.Image = global::PageDisplay.Properties.Resources.templateImage3;
+            this.pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox.Name = "customPictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(833, 309);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox.TabIndex = 0;
+            this.pictureBox.TabStop = false;
+            this.pictureBox.WaitOnLoad = true;
+            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.customPictureBoxMouseMove);
             // 
             // PageDisplayComponent
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.Controls.Add(this.customPictureBox);
+            this.Controls.Add(this.pictureBox);
             this.Name = "PageDisplayComponent";
             this.Size = new System.Drawing.Size(1012, 548);
             this.Scroll += new System.Windows.Forms.ScrollEventHandler(this.PageDisplayComponentScroll);
-            ((System.ComponentModel.ISupportInitialize)(this.customPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private CustomPictureBox customPictureBox;
+        private PictureBox pictureBox;
     }
 }

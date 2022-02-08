@@ -2,6 +2,7 @@
 {
     public class ImageScaling
     {
+        const int scrollLineWidth = 25;
         public struct ImageDisplayProperties
         {
             public int imageWidth;
@@ -15,7 +16,9 @@
 
             public bool horisontal;
 
-            public ImageDisplayProperties(Image image, ScrollProperties scrollProperties, float currScale, bool isHorisonatal)
+            public Size displaySize;
+
+            public ImageDisplayProperties(Size image, Size dispSize, ScrollProperties scrollProperties, float currScale, bool isHorisonatal)
             {
                 imageWidth = image.Width;
                 imageHeight = image.Height;
@@ -26,19 +29,11 @@
 
                 currentScale = currScale;
                 horisontal = isHorisonatal;
+
+                displaySize = dispSize;
             }
 
         };
-        public static Bitmap ResizeBitmap(Bitmap sourceBitmap, int picBoxWidth, int PicBoxHeight, int width, int height)
-        {
-            // Resizes the Bitmap and also shifts it by the given number of pixels.
-            Bitmap result = new Bitmap(picBoxWidth, PicBoxHeight);
-            using (Graphics g = Graphics.FromImage(result))
-            {
-                g.DrawImage(sourceBitmap, 0, 0, width, height);
-            }
-            return result;
-        }
 
         public static (int, int) GetPointVisibleArea(ImageDisplayProperties imgDispProp, int shift)
         {
@@ -51,13 +46,16 @@
             int scrollMaxValue = imgDispProp.scrollMaximum - imgDispProp.scrollLargeChange;
 
             float currentImageSize;
+            int displaySize;
             if (imgDispProp.horisontal)
             {
                 currentImageSize = imgDispProp.imageWidth * imgDispProp.currentScale;
+                displaySize = imgDispProp.displaySize.Width - scrollLineWidth;
             }
             else
             {
                 currentImageSize = imgDispProp.imageHeight * imgDispProp.currentScale;
+                displaySize = imgDispProp.displaySize.Height - scrollLineWidth;
             }
 
             if (scrollMaxValue == 0)
@@ -66,12 +64,12 @@
                 return (0, (int)currentImageSize);
             }
 
-            float scrollStep = (currentImageSize - imgDispProp.scrollLargeChange) / scrollMaxValue;
+            float scrollStep = (currentImageSize - displaySize) / scrollMaxValue;
 
             float correctionShift = -shift / imgDispProp.currentScale - scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale;
 
             int leftBorder = (int)(correctionShift + scrollStep * imgDispProp.scrollValue / imgDispProp.currentScale);
-            int rightBorder = leftBorder + (int)(imgDispProp.scrollLargeChange / imgDispProp.currentScale) - 2;
+            int rightBorder = leftBorder + (int)(displaySize / imgDispProp.currentScale) - 2;
 
             return (leftBorder, rightBorder);
         }
