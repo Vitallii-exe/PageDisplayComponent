@@ -38,6 +38,7 @@
             this.pageDisplayComponent1.Name = "pageDisplayComponent1";
             this.pageDisplayComponent1.Size = new System.Drawing.Size(1012, 548);
             this.pageDisplayComponent1.TabIndex = 0;
+            this.pageDisplayComponent1.scaleChanged += new PageDisplayComponent.ScaleChanged (this.ProcessScaleChanging);
             // 
             // DisplayForm
             // 

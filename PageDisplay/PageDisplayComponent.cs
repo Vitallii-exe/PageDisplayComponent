@@ -2,17 +2,21 @@
 {
     public partial class PageDisplayComponent : UserControl
     {
+        public delegate void ScaleChanged(float scale);
+        public event ScaleChanged scaleChanged;
+
         Image original = Properties.Resources.templateImage3;
         float currentScale = 1F;
-        float[] scaleSteps = {0.1F, 0.1F, 0.1F, 0.1F, 0.2F, 0.2F, 0.3F, 0.4F, 0.5F, 1F};
-        uint currentScaleStepIndex = 0;
+        float[] scaleSteps = {0.25F, 0.5F, 1F, 1.5F, 2F, 3F, 4F, 5F};
+        float scaleFixedStep = 0.5F;
+        uint currentScaleStepIndex = 2;
         bool isScaleUp = false;
         int scrollStep = 20;
         int currentHScroll = 0;
         bool isScrollEditing = false;
 
-        Point customPictureBoxCursorPos = new Point(0, 0);
-        bool lockCursors = false;
+        bool isBlockRedraw = false;
+
         public PageDisplayComponent()
         {
             InitializeComponent();
@@ -24,13 +28,13 @@
 
         public void RedrawToNewScaleСustomPictureBox()
         {
+            isBlockRedraw = true;
             int newWidth = (int)(original.Width * currentScale);
             int newHeight = (int)(original.Height * currentScale);
             Size newScaledSize = new Size(newWidth, newHeight);
             if (newScaledSize != pictureBox.Size)
             {
                 Size oldSize = pictureBox.Size;
-                lockCursors = true;
                 pictureBox.Size = new Size(newWidth, newHeight);
                 if (newWidth < Width & newHeight < Height)
                 {
@@ -38,54 +42,54 @@
                 }
                 else
                 {
-                    pictureBox.Location = ImageScaling.GetCoordToScaleWithCursorBinding(customPictureBoxCursorPos, pictureBox.Size, oldSize, pictureBox.Location);
+                    Point relativeCursorPos = pictureBox.PointToClient(Cursor.Position);
+
+                    pictureBox.Location = ImageScaling.GetCoordToScaleWithCursorBinding(relativeCursorPos,
+                                                                                        pictureBox.Size, oldSize, 
+                                                                                        pictureBox.Location);
                 }
-                lockCursors = false;
+                scaleChanged?.Invoke(currentScale);
             }
+            isBlockRedraw = false;
+            //pictureBox.Refresh();
             return;
         }
 
         private void ScaleChangedByWheel(bool up)
         {
+            bool isOutOfRange = false;
             if (up)
             {
-                if (!isScaleUp)
-                {
-                    currentScaleStepIndex = 0;
-                }
                 if (currentScaleStepIndex < scaleSteps.Length - 1)
                 {
                     currentScaleStepIndex += 1;
                 }
-                isScaleUp = true;
+                else
+                {
+                    isOutOfRange = true;
+                }
             }
             else
             {
-                if (isScaleUp)
+                if (currentScaleStepIndex > 0)
                 {
-                    currentScaleStepIndex = 0;
+                    currentScaleStepIndex -= 1;
                 }
-                if (currentScaleStepIndex < scaleSteps.Length - 1)
+                else
                 {
-                    currentScaleStepIndex += 1;
+                    isOutOfRange = true;
                 }
-                isScaleUp = false;
             }
-            if (isScaleUp)
+            if (!isOutOfRange)
             {
-                currentScale += scaleSteps[currentScaleStepIndex];
+                currentScale = scaleSteps[currentScaleStepIndex];
             }
             else
             {
-                currentScale -= scaleSteps[currentScaleStepIndex];
-            }
-            if (currentScale > 5F)
-            {
-                currentScale = 5F;
-            }
-            else if (currentScale < 0.2F)
-            {
-                currentScale = 0.2F;
+                if (up)
+                {
+                    currentScale += scaleFixedStep;
+                }
             }
             RedrawToNewScaleСustomPictureBox();
             Refresh();
@@ -152,15 +156,6 @@
             //TmpDrawRect(Visible.st, Visible.fin, Visible2.st, Visible2.fin);
             // -----
             return;
-        }
-
-        private void customPictureBoxMouseMove(object sender, MouseEventArgs e)
-        {
-            if (!lockCursors)
-            {
-                customPictureBoxCursorPos = e.Location;
-            }
-            //System.Diagnostics.Debug.WriteLine("X - " + e.Location.X + " Y - " + e.Location.Y);
         }
     }
 }

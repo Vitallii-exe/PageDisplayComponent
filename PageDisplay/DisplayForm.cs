@@ -6,5 +6,10 @@ namespace PageDisplay
         {
             InitializeComponent();
         }
+
+        void ProcessScaleChanging(float scale)
+        {
+            //System.Diagnostics.Debug.WriteLine("Новое значение масштаба - " + scale.ToString());
+        }
     }
 }

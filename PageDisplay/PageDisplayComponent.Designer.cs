@@ -44,7 +44,6 @@
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
             this.pictureBox.WaitOnLoad = true;
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.customPictureBoxMouseMove);
             // 
             // PageDisplayComponent
             // 

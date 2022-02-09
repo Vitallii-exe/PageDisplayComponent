@@ -3,6 +3,7 @@
     public partial class PageDisplayComponent : UserControl
     {
         const int WM_MOUSEWHEEL = 0x020A;
+        const int WM_PAINT = 0xf;
         const int MK_CONTROL = 0x8;
         const int MK_SHIFT = 0x4;
         const int wheelForward = 120;
@@ -42,6 +43,13 @@
                     {
                         HorizontalScrollChanged(false);
                     }
+                    return;
+                }
+            }
+            else if (m.Msg == WM_PAINT)
+            {
+                if (isBlockRedraw)
+                {
                     return;
                 }
             }
